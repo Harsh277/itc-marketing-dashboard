@@ -29,7 +29,7 @@ with col1:
     st.markdown(
         """
         This dashboard is an interactive Proof of Concept for the **ITC Interrobang Season 15** case study. 
-        The **Athena AI Suite** is designed to move beyond simple reporting and provide diagnostics, predictive planning, and agentic, real-time alerting.
+        The **Yukti AI Suite** is designed to move beyond simple reporting and provide diagnostics, predictive planning, and agentic, real-time alerting.
         """
     )
     
@@ -69,3 +69,4 @@ with col2:
             """
 
         )
+
