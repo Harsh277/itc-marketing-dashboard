@@ -71,7 +71,15 @@ def resolve_issue(sheet_name, issue_row, is_auto_resolve=False):
             requests.post(n8n_webhook_url, json=payload, timeout=10)
 
         # Part 2: Update the Google Sheet
-        client = gspread.service_account(filename='gcp_secrets.json')
+        # Check if running in Streamlit Cloud and use secrets (nested under 'connections')
+        if "connections" in st.secrets and "gcs" in st.secrets["connections"]:
+            creds_dict = dict(st.secrets["connections"]["gcs"])
+            creds_dict["type"] = "service_account"  # Override to match gspread expectation
+            client = gspread.service_account_from_dict(creds_dict)
+        # Fallback to local file for local development
+        else:
+            client = gspread.service_account(filename='gcp_secrets.json')
+        
         sheet = client.open(sheet_name).sheet1
         cell = sheet.find(str(issue_row['Timestamp'])) 
         
@@ -148,5 +156,3 @@ if not live_df.empty:
                             st.rerun()
 else:
     st.success("✅ All clear! No pending issues found in the queue.")
-
-
