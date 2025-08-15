@@ -5,3 +5,4 @@ plotly
 numpy
 prophet
 requests
+streamlit-gsheets
