@@ -30,9 +30,10 @@ def load_data_from_gsheet(sheet_name):
     Uses Streamlit's secrets for authentication when deployed.
     """
     try:
-        # Check if running in Streamlit Cloud and use secrets
-        if 'gcs' in st.secrets:
-            creds_dict = st.secrets.gcs
+        # Check if running in Streamlit Cloud and use secrets (nested under 'connections')
+        if "connections" in st.secrets and "gcs" in st.secrets["connections"]:
+            creds_dict = dict(st.secrets["connections"]["gcs"])
+            creds_dict["type"] = "service_account"  # Override to match gspread expectation
             client = gspread.service_account_from_dict(creds_dict)
         # Fallback to local file for local development
         else:
@@ -270,6 +271,7 @@ if not df.empty:
         st.warning("Please select a valid date range.")
 else:
     st.error("Failed to load data.")
+
 
 
 
