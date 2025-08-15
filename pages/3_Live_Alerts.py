@@ -33,8 +33,20 @@ def load_live_status(sheet_name):
         sheet = client.open(sheet_name).sheet1
         data = pd.DataFrame(sheet.get_all_records())
         
+        # --- Data Cleaning ---
+        df = data
+        if 'Date' in df.columns:
+            df['Date'] = pd.to_datetime(df['Date'], format='%d-%b-%y')
+        numeric_cols = [
+            'Target_ROAS', 'Actual_ROAS', 'Target_CTR', 'Actual_CTR', 
+            'Target_CPC', 'Actual_CPC', 'Impressions', 'Conversions', 'NTB_Rate'
+        ]
+        for col in numeric_cols:
+            if col in df.columns:
+                df[col] = pd.to_numeric(df[col].astype(str).str.replace('%', ''), errors='coerce')
+        
         # Filter for pending issues
-        pending_issues = data[data['Status'] == 'Pending']
+        pending_issues = df[df['Status'] == 'Pending']
         return pending_issues
     except Exception as e:
         st.error(f"Error connecting to Live Issue Queue: {e}")
@@ -136,4 +148,5 @@ if not live_df.empty:
                             st.rerun()
 else:
     st.success("✅ All clear! No pending issues found in the queue.")
+
 
