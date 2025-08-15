@@ -11,20 +11,21 @@ import plotly.graph_objects as go
 st.set_page_config(page_title="Campaign Forecaster", page_icon="🔮", layout="wide")
 
 # --- Data Loading Function ---
+# --- NEW: Final, Corrected Data Loading Function ---
+from streamlit_gsheets import GSheetsConnection
+
 @st.cache_data(ttl=600)
 def load_data_from_gsheet(sheet_name):
-    """Loads and processes data from the specified Google Sheet."""
+    """Loads and processes data using the official Streamlit GSheetsConnection."""
     try:
-        # Check if running in Streamlit Cloud
-        if 'gcs' in st.secrets:
-            creds_dict = st.secrets.gcs
-            client = gspread.service_account_from_dict(creds_dict)
-        else:
-            client = gspread.service_account(filename='gcp_secrets.json')
-        sheet = client.open(sheet_name).sheet1
-        data = sheet.get_all_records()
-        df = pd.DataFrame(data)
+        # Establish the connection using the name from your secrets file ('gsheets')
+        conn = st.connection("gsheets", type=GSheetsConnection)
         
+        # Read the data from the specified worksheet
+        # The worksheet is your Google Sheet's name (e.g., "ITC_Campaign_Data_Live")
+        df = conn.read(worksheet=sheet_name, usecols=lambda x: x.upper() != '', ttl=600)
+        
+        # Perform your data type conversions
         df['Date'] = pd.to_datetime(df['Date'], format='%d-%b-%y')
         numeric_cols = [
             'Target_ROAS', 'Actual_ROAS', 'Target_CTR', 'Actual_CTR', 
@@ -195,3 +196,4 @@ if not df.empty:
             st.error("Could not generate a budget plan. Not enough historical data for the selected product/SKU/city combination.")
 else:
     st.error("Failed to load data. Please ensure your Google Sheet is set up correctly and shared.")
+
