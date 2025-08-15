@@ -4,5 +4,6 @@ gspread
 plotly
 numpy
 prophet
-streamlit-gspread
+st-gspread
 requests
+
