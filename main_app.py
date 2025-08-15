@@ -3,7 +3,7 @@ import streamlit as st
 
 # --- Page Config ---
 st.set_page_config(
-    page_title="Athena AI Suite - Home",
+    page_title="Yukti AI - Home",
     page_icon="🤖",
     layout="wide"
 )
@@ -14,7 +14,7 @@ with st.container():
     with col1:
         st.image("https://i.imgur.com/EnduringValue.png", width=150) # ITC Logo
     with col2:
-        st.title("Athena AI Marketing Suite")
+        st.title("Yukti AI Marketing Suite")
         st.markdown("An AI-Powered & Agentic Solution for Performance Marketing Optimization")
 
 st.sidebar.success("Select a module from the sidebar to begin.")
@@ -67,4 +67,5 @@ with col2:
             - *MAHAK YADAV*
             - *SUDARSHAN JAIN*
             """
+
         )
