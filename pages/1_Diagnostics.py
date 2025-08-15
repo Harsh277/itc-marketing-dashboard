@@ -21,20 +21,19 @@ CITY_COORDINATES = {
 }
 
 # --- Data Loading Function ---
+# --- NEW: Data Loading Function using st.connection ---
 @st.cache_data(ttl=600)
 def load_data_from_gsheet(sheet_name):
-    """Loads and processes data from the specified Google Sheet."""
+    """Loads and processes data using Streamlit's gspread Connection."""
     try:
-        # Check if running in Streamlit Cloud
-        if 'gcs' in st.secrets:
-            creds_dict = st.secrets.gcs
-            client = gspread.service_account_from_dict(creds_dict)
-        else:
-            client = gspread.service_account(filename='gcp_secrets.json')
-        sheet = client.open(sheet_name).sheet1
-        data = sheet.get_all_records()
-        df = pd.DataFrame(data)
+        # Establish the connection using the name from your secrets file ('gcs')
+        conn = st.connection("gcs", type=st_gspread.GSpreadConnection)
         
+        # Open the spreadsheet and read the data
+        spreadsheet = conn.open(sheet_name)
+        df = spreadsheet.worksheet("Sheet1").get_as_df() # Assumes your data is on "Sheet1"
+        
+        # Perform your data type conversions
         df['Date'] = pd.to_datetime(df['Date'], format='%d-%b-%y')
         numeric_cols = [
             'Target_ROAS', 'Actual_ROAS', 'Target_CTR', 'Actual_CTR', 
@@ -261,3 +260,4 @@ if not df.empty:
         st.warning("Please select a valid date range.")
 else:
     st.error("Failed to load data.")
+
