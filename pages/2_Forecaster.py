@@ -15,7 +15,12 @@ st.set_page_config(page_title="Campaign Forecaster", page_icon="🔮", layout="w
 def load_data_from_gsheet(sheet_name):
     """Loads and processes data from the specified Google Sheet."""
     try:
-        client = gspread.service_account(filename='gcp_secrets.json')
+        # Check if running in Streamlit Cloud
+        if 'gcs' in st.secrets:
+            creds_dict = st.secrets.gcs
+            client = gspread.service_account_from_dict(creds_dict)
+        else:
+            client = gspread.service_account(filename='gcp_secrets.json')
         sheet = client.open(sheet_name).sheet1
         data = sheet.get_all_records()
         df = pd.DataFrame(data)
