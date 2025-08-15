@@ -13,11 +13,22 @@ if 'resolved_timestamps' not in st.session_state:
     st.session_state.resolved_timestamps = []
 
 # --- Data Loading Function for Live Status ---
+# --- UPDATED Data Loading Function for Deployment ---
 @st.cache_data(ttl=10)
 def load_live_status(sheet_name):
-    """Loads the last 5 pending issues from the queue."""
+    """
+    Loads pending issues from the queue.
+    Uses Streamlit's secrets for authentication when deployed.
+    """
     try:
-        client = gspread.service_account(filename='gcp_secrets.json')
+        # Check if running in Streamlit Cloud
+        if 'gcs' in st.secrets:
+            creds_dict = st.secrets.gcs
+            client = gspread.service_account_from_dict(creds_dict)
+        else:
+            # Fallback to local file for local development
+            client = gspread.service_account(filename='gcp_secrets.json')
+        
         sheet = client.open(sheet_name).sheet1
         data = pd.DataFrame(sheet.get_all_records())
         
