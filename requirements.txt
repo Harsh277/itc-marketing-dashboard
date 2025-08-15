@@ -5,4 +5,5 @@ plotly
 numpy
 prophet
 requests
-streamlit-gsheets
+st-gsheets-connection
+
