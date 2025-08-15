@@ -12,21 +12,29 @@ st.set_page_config(page_title="Campaign Forecaster", page_icon="🔮", layout="w
 
 # --- Data Loading Function ---
 # --- NEW: Final, Corrected Data Loading Function ---
-from streamlit_gsheets import GSheetsConnection
-
+# --- FINAL Data Loading Function for Deployment ---
 @st.cache_data(ttl=600)
 def load_data_from_gsheet(sheet_name):
-    """Loads and processes data using the official Streamlit GSheetsConnection."""
+    """
+    Loads data from Google Sheets using a service account.
+    Uses Streamlit's secrets for authentication when deployed.
+    """
     try:
-        # Establish the connection using the name from your secrets file ('gsheets')
-        conn = st.connection("gsheets", type=GSheetsConnection)
+        # Check if running in Streamlit Cloud and use secrets
+        if 'gcs' in st.secrets:
+            creds_dict = st.secrets.gcs
+            client = gspread.service_account_from_dict(creds_dict)
+        # Fallback to local file for local development
+        else:
+            client = gspread.service_account(filename='gcp_secrets.json')
         
-        # Read the data from the specified worksheet
-        # The worksheet is your Google Sheet's name (e.g., "ITC_Campaign_Data_Live")
-        df = conn.read(worksheet=sheet_name, usecols=lambda x: x.upper() != '', ttl=600)
+        sheet = client.open(sheet_name).sheet1
+        data = pd.DataFrame(sheet.get_all_records())
         
-        # Perform your data type conversions
-        df['Date'] = pd.to_datetime(df['Date'], format='%d-%b-%y')
+        # --- Data Cleaning ---
+        df = pd.DataFrame(data)
+        if 'Date' in df.columns:
+            df['Date'] = pd.to_datetime(df['Date'], format='%d-%b-%y')
         numeric_cols = [
             'Target_ROAS', 'Actual_ROAS', 'Target_CTR', 'Actual_CTR', 
             'Target_CPC', 'Actual_CPC', 'Impressions', 'Conversions', 'NTB_Rate'
@@ -196,4 +204,5 @@ if not df.empty:
             st.error("Could not generate a budget plan. Not enough historical data for the selected product/SKU/city combination.")
 else:
     st.error("Failed to load data. Please ensure your Google Sheet is set up correctly and shared.")
+
 
