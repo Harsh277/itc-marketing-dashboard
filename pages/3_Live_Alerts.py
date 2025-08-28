@@ -59,7 +59,7 @@ def resolve_issue(sheet_name, issue_row, is_auto_resolve=False):
     try:
         # Part 1: Trigger n8n webhook if on Auto-Resolve
         if is_auto_resolve:
-            n8n_webhook_url = "https://harsholii.app.n8n.cloud/webhook/a66130ae-58a5-45c9-9562-8d1d52bf4024" # <-- IMPORTANT!
+            n8n_webhook_url = "https://harsholi.app.n8n.cloud/webhook/a66130ae-58a5-45c9-9562-8d1d52bf4024" # <-- IMPORTANT!
             
             payload = {
                 "product": issue_row['Product'],
@@ -156,3 +156,4 @@ if not live_df.empty:
                             st.rerun()
 else:
     st.success("✅ All clear! No pending issues found in the queue.")
+
