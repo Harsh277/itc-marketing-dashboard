@@ -58,6 +58,7 @@ with col2:
     # --- Prominent Project & Team Details ---
     with st.container(border=True):
         st.subheader("Project Details")
+        st.markdown("##### Made by: Harsh Singh")
         st.markdown("#### ITC Interrobang Season 15")
         st.divider()
         st.markdown("#### Team: *Acers*")
@@ -69,4 +70,5 @@ with col2:
             """
 
         )
+
 
