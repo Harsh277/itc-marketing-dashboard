@@ -62,13 +62,15 @@ with col2:
         st.markdown("#### ITC Interrobang Season 15")
         st.divider()
         st.markdown("#### Team: *Acers*")
-        st.markdown(
-            """
-            - *HARSH SINGH*
-            - *MAHAK YADAV*
-            - *SUDARSHAN JAIN*
-            """
+        
+        #st.markdown(
+         #   """
+          #  - *HARSH SINGH*
+           # - *MAHAK YADAV*
+            #- *SUDARSHAN JAIN*
+            #"""
 
-        )
+        #)
+
 
 
