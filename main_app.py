@@ -55,16 +55,13 @@ with col1:
     )
 
 with col2:
-    # --- Prominent Project & Team Details ---
-    with st.container(border=True):
-        st.subheader("Project Details")
-        
-        # This is the changed line
-        st.markdown("##### Made by: [Harsh Singh](https://www.linkedin.com/in/singh-harsh277/)")
-        
-        st.markdown("#### ITC Interrobang Season 15")
-        st.divider()
-        st.markdown("#### Team: *Acers*")
+    # --- Prominent Project & Team Details ---
+    with st.container(border=True):
+        st.subheader("Project Details")
+        st.markdown("##### Made by: [Harsh Singh](https://www.linkedin.com/in/singh-harsh277/)") # Paste your URL here
+        st.markdown("#### ITC Interrobang Season 15")
+        st.divider()
+        st.markdown("#### Team: *Acers*")
 
 
 #with col2:
@@ -84,6 +81,7 @@ with col2:
             #"""
 
         #)
+
 
 
 
