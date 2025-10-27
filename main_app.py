@@ -28,10 +28,11 @@ with col1:
     st.header("Welcome!")
     st.markdown(
         """
-        This dashboard is an interactive Proof of Concept for the **ITC Interrobang Season 15** case study. 
+        This dashboard is an interactive Proof of Concept.  
         The **Yukti AI Suite** is designed to move beyond simple reporting and provide diagnostics, predictive planning, and agentic, real-time alerting.
         """
     )
+    #    This dashboard is an interactive Proof of Concept. for the **ITC Interrobang Season 15** case study 
     
     st.subheader("Application Modules")
     # Using st.info, st.warning, st.success to create colored boxes for each module
@@ -81,6 +82,7 @@ with col2:
             #"""
 
         #)
+
 
 
 
